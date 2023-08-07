@@ -12,6 +12,7 @@ const fs = require('fs');
 
 //Async way
 fs.readFile(path.resolve(__dirname,'./final/txt/start.txt'), 'utf-8', (err,data) => {
+    if (err) return console.log('this didnt work sry');
     fs.readFile(path.resolve(__dirname,`./final/txt/${data}.txt`), 'utf-8', (err,data2) => {
         console.log(data2);
         fs.readFile(path.resolve(__dirname,`./final/txt/append.txt`), 'utf-8', (err,data3) => {
