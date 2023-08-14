@@ -18,7 +18,7 @@ fs.readFile(path.resolve(__dirname,'./final/txt/start.txt'), 'utf-8', (err,data)
         fs.readFile(path.resolve(__dirname,`./final/txt/append.txt`), 'utf-8', (err,data3) => {
             console.log(data3);
             fs.writeFile(path.resolve(__dirname,`./final/txt/final.txt`), `${data2}\n${data3}\nWritten On: ${Date.now()}`, 'utf-8', err => {
-                console.log('written boi');
+                console.log('written boi test');
             });
         });
     });
