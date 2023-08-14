@@ -32,7 +32,7 @@ console.log('reading first'); */
 ///////////////////////////
 // SERVER
 
-const data = fs.readFileSync(`${__dirname}/final/dev-data/data.json`, 'utf-8');
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
 const dataObj = JSON.parse(data);
 
 const server = http.createServer((req, res) =>{
