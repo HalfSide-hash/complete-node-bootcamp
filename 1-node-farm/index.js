@@ -1,6 +1,8 @@
 const path = require("path");
 const fs = require('fs');
+const http = require('http');
 
+//FILES
 //Synchronous way
 // const textIn = fs.readFileSync(path.resolve(__dirname,'./final/txt/input.txt'), 'utf-8');
 
@@ -11,7 +13,7 @@ const fs = require('fs');
 // console.log('file written');
 
 //Async way
-fs.readFile(path.resolve(__dirname,'./final/txt/start.txt'), 'utf-8', (err,data) => {
+/* fs.readFile(path.resolve(__dirname,'./final/txt/start.txt'), 'utf-8', (err,data) => {
     if (err) return console.log('this didnt work sry');
     fs.readFile(path.resolve(__dirname,`./final/txt/${data}.txt`), 'utf-8', (err,data2) => {
         console.log(data2);
@@ -24,4 +26,15 @@ fs.readFile(path.resolve(__dirname,'./final/txt/start.txt'), 'utf-8', (err,data)
     });
 });
 
-console.log('reading first');
+console.log('reading first'); */
+
+///////////////////////////
+// SERVER
+const server = http.createServer((req, res) =>{
+    console.log(req);
+    res.end('The server talkin');
+});
+
+server.listen(8000, '127.0.0.1', () => {
+    console.log('Listening to requests on port 8000');
+})
