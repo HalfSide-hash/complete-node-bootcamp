@@ -32,6 +32,9 @@ console.log('reading first'); */
 ///////////////////////////
 // SERVER
 
+const tempOverview = fs.readFileSync(`${__dirname}/template/template-overview.html`, 'utf-8');
+const tempCard = fs.readFileSync(`${__dirname}/template/template-card.html`, 'utf-8');
+const tempProduct = fs.readFileSync(`${__dirname}/template/template-product.html`, 'utf-8');
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
 const dataObj = JSON.parse(data);
 
@@ -39,7 +42,10 @@ const server = http.createServer((req, res) =>{
     console.log(req.url);
     const pathName = req.url;
     if (pathName === '/' || pathName === '/overview'){
-        res.end('We OVERVIEWING BOIS with KENERGY');
+        res.writeHead(200, {
+            'Content-type' : 'html'
+        });
+        res.end(tempOverview);
     }
     else if (pathName === '/product'){
             res.end('We PRODUCTING BOIS');
