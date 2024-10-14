@@ -39,15 +39,25 @@ const getDogPic = async () => {
   return '2: READY';
 };
 
-console.log('Will get dog pics');
-getDogPic()
+(async () => {
+  try {
+    console.log('Will get dog pics');
+    const x = await getDogPic();
+    console.log(x);
+    console.log('got dem dog pics');
+  } catch (err) {
+    console.log('EXPLOSIONA');
+  }
+})();
+
+/*getDogPic()
   .then((x) => {
     console.log(x);
     console.log('get dem dog pics');
   })
   .catch((err) => {
     console.log('EXPLOSIONA');
-  });
+  });*/
 
 /*readFilePro(`${__dirname}/dog.txt`).then((data) => {
   console.log(`Breed: ${data}`);
