@@ -33,10 +33,22 @@ const getDogPic = async () => {
     console.log('Random dog image saved to file!');
   } catch {
     console.log(err);
+    throw err;
   }
+
+  return '2: READY';
 };
 
-getDogPic();
+console.log('Will get dog pics');
+getDogPic()
+  .then((x) => {
+    console.log(x);
+    console.log('get dem dog pics');
+  })
+  .catch((err) => {
+    console.log('EXPLOSIONA');
+  });
+
 /*readFilePro(`${__dirname}/dog.txt`).then((data) => {
   console.log(`Breed: ${data}`);
   return superagent
