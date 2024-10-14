@@ -10,7 +10,7 @@ const readFilePro = (file) => {
   });
 };
 
-readFilePro(`${__dirname}/dog.txt`).then((result) => {
+readFilePro(`${__dirname}/dog.txt`).then((data) => {
   console.log(`Breed: ${data}`);
 
   superagent
