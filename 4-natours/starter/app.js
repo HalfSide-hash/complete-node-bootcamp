@@ -5,21 +5,11 @@ const app = express();
 
 app.use(express.json());
 
-// app.get('/', (req, res) => {
-//   res
-//     .status(200)
-//     .json({ message: 'Hello from the server siiiiide', app: 'Natours' });
-// });
-
-// app.post('/', (req, res) => {
-//   res.send('You can post to this endpoint... for now');
-// });
-
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
-app.get('/api/v1/tours', (req, res) => {
+const getAllTours = (req, res) => {
   res.status(200).json({
     status: 'success',
     results: tours.length,
@@ -27,9 +17,9 @@ app.get('/api/v1/tours', (req, res) => {
       tours: tours,
     },
   });
-});
+};
 
-app.get('/api/v1/tours/:id', (req, res) => {
+const getTour = (req, res) => {
   const id = Number(req.params.id);
   const tour = tours.find((el) => el.id === id);
   if (!tour) {
@@ -44,26 +34,9 @@ app.get('/api/v1/tours/:id', (req, res) => {
       tour: tour,
     },
   });
-});
+};
 
-app.patch('/api/v1/tours/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const tour = tours.find((el) => el.id === id);
-  if (Number(req.params.id) > tours.length) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid Id',
-    });
-  }
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour: '',
-    },
-  });
-});
-
-app.post('/api/v1/tours', (req, res) => {
+const createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
   const newTour = Object.assign({ id: newId }, req.body);
 
@@ -80,7 +53,51 @@ app.post('/api/v1/tours', (req, res) => {
       });
     }
   );
-});
+};
+
+const updateTour = (req, res) => {
+  const id = Number(req.params.id);
+  const tour = tours.find((el) => el.id === id);
+  if (Number(req.params.id) > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid Id',
+    });
+  }
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour: '<Totally Updated fr>',
+    },
+  });
+};
+
+const deleteTour = (req, res) => {
+  const id = Number(req.params.id);
+  const tour = tours.find((el) => el.id === id);
+  if (Number(req.params.id) > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid Id',
+    });
+  }
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+};
+
+app.get('/api/v1/tours', getAllTours);
+
+app.get('/api/v1/tours/:id', getTour);
+
+app.patch('/api/v1/tours/:id', updateTour);
+
+app.post('/api/v1/tours', createTour);
+
+app.delete('/api/v1/tours/:id', deleteTour);
+
+app.route('/api/v1/tours');
 
 const port = 3000;
 app.listen(port, () => {
