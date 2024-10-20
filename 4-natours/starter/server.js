@@ -1,5 +1,7 @@
 const app = require('./app');
 
+console.log(process.env);
+
 //START SERVER
 
 const port = 3000;
