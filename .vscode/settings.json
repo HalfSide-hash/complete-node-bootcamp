@@ -1,4 +1,11 @@
 {
   "eslint.enable": true,
-  "eslint.nodePath": ""
+  "eslint.debug": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "html",
+    "typescriptreact"
+  ],
+  "eslint.workingDirectories": ["./4-natours"]
 }
