@@ -7,11 +7,11 @@ const router = express.Router();
 // Check if cbody contains the name and price oroperty
 // If not, get mad
 
-router.param('id', tourController.checkID);
+//router.param('id', tourController.checkID);
 router
   .route('/')
   .get(tourController.getAllTours)
-  .post(tourController.checkBody, tourController.createTour);
+  .post(tourController.createTour);
 router
   .route('/:id')
   .get(tourController.getTour)
