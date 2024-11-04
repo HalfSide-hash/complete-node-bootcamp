@@ -42,7 +42,9 @@ module.exports = (err, req, res, next) => {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
-    if (error.name === 'CastError') error = handleCastErrorDB(error);
+    if (err.stack.indexOf('CastError', 0) === 0)
+      //err.name got deprecated! for some reason
+      error = handleCastErrorDB(error);
     sendErrorProd(error, res);
   }
 };
