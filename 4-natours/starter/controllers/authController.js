@@ -97,3 +97,16 @@ exports.restrictTo =
     }
     next();
   };
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new AppError('There is no user with that email address', 404));
+  }
+
+  // Generate the ranodm reset token
+  const resetToken = user.createPasswordResetToken();
+  console.log(resetToken);
+  await user.save({ validateBeforeSave: false });
+  next();
+});
