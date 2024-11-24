@@ -1,14 +1,11 @@
 const express = require('express');
 const tourController = require('../controllers/tourController');
+const reviewRouter = require('../routes/reviewRoutes');
 const authController = require('../controllers/authController');
 
 const router = express.Router();
 
-//Create a checkBody middleWare
-// Check if cbody contains the name and price oroperty
-// If not, get mad
-
-//router.param('id', tourController.checkID);
+router.use('/:tourId/reviews', reviewRouter);
 
 router.route('/tour-stats').get(tourController.getTourStats);
 router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
