@@ -103,7 +103,7 @@ exports.restrictTo =
   (...roles) =>
   (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      next(new AppError('User not able to delete tours.', 403));
+      next(new AppError('User not able to perform this action.', 403));
     }
     next();
   };
