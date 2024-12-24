@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 // MIDDLEWARES
 
 //Security HTTP Headers
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: false }));
 
 //Development logging
 if (process.env.NODE_ENV === 'development') {

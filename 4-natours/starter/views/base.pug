@@ -4,6 +4,7 @@ html
         block head
             meta(charset='UTF-8')
             meta(name='viewport' content='width=device-witdth, initial-scale=1.0')
+            meta(http-equiv='Content-Security-Policy' content="script-src 'self' https://cdnjs.cloudflare.com/ 'unsafe-inline' 'unsafe-eval'")
             title Natours | #{title}
             link(rel='stylesheet' href='/css/style.css')
             link(rel='shortcut icon' type='image/png' href='/img/favicon.png')
@@ -19,4 +20,6 @@ html
     //FOOTER
     include _footer
     
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js')
     script(src='/js/mapbox.js')
+    script(src='/js/login.js')
