@@ -39,6 +39,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.37.1",
     "package.json": "^2.0.1",
+    "parcel-bundler": "^1.12.5",
     "prettier": "^3.3.3"
   },
   "engines": {

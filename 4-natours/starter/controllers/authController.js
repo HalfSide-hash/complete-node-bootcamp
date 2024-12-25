@@ -101,6 +101,33 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+//Only for rendered pages
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  // Getting the token and check if it's there
+  if (req.cookies.jwt) {
+    // Verifiction token -- will automatically throw error if this check fails
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET,
+    );
+
+    // Check if the user still exists
+    const freshUser = await User.findById(decoded.id);
+    if (!freshUser) {
+      return next();
+    }
+    // Check if user changed password after the JWT was issued
+    if (freshUser.changedPasswordAfter(decoded.iat)) {
+      return next();
+    }
+
+    //User is Logged In
+    res.locals.user = freshUser;
+    req.user = freshUser;
+  }
+  next();
+});
+
 exports.restrictTo =
   (...roles) =>
   (req, res, next) => {
