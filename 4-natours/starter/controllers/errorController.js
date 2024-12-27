@@ -20,33 +20,57 @@ const handleJWTError = () => new AppError('Invalid token', 401);
 
 const handleJWTExpiredError = () => new AppError('Token expired', 401);
 
-const sendErrorDev = (err, res) => {
-  res.status(err.statusCode).json({
-    status: err.status,
-    message: err.message,
-    error: err,
-    stack: err.stack,
-  });
-};
-
-const sendErrorProd = (err, res) => {
-  //Operational error, trusted error: send message to client
-  if (err.isOperational) {
+const sendErrorDev = (err, req, res) => {
+  if (req.originalUrl.startsWith('/api')) {
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
+      error: err,
+      stack: err.stack,
     });
-    //Programing or other unknown error: dont let the public panic
   } else {
+    res.status(err.statusCode).render('error', {
+      title: 'Something went wrong!',
+      msg: err.message,
+    });
+  }
+};
+
+const sendErrorProd = (err, req, res) => {
+  if (req.originalUrl.startsWith('/api')) {
+    //Operational error, trusted error: send message to client
+    if (err.isOperational) {
+      return res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message,
+      });
+      //Programing or other unknown error: dont let the public panic
+    }
     //1) Log error
     console.error('ERROR ', err);
 
     //2) Return generic message to client
-    res.status(500).json({
+    return res.status(500).json({
       status: 'error',
       message: 'Something went very wrong!',
     });
   }
+  //Operational error, trusted error: send message to client
+  if (err.isOperational) {
+    return res.status(err.statusCode).render('error', {
+      title: 'Something went wrong!',
+      msg: err.message,
+    });
+    //Programing or other unknown error: dont let the public panic
+  }
+  //1) Log error
+  console.error('ERROR ', err);
+
+  //2) Return generic message to client
+  return res.status(500).json({
+    status: 'error',
+    message: 'Please try again later.',
+  });
 };
 
 module.exports = (err, req, res, next) => {
@@ -54,7 +78,7 @@ module.exports = (err, req, res, next) => {
   err.status = err.status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
-    sendErrorDev(err, res);
+    sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
     //err.name got deprecated! so we took matters into our own hand by using the stack
@@ -67,6 +91,6 @@ module.exports = (err, req, res, next) => {
     if (err.name === 'JsonWebTokenError') error = handleJWTError();
     if (err.name === 'TokenExpiredError') error = handleJWTExpiredError();
 
-    sendErrorProd(error, res);
+    sendErrorProd(error, req, res);
   }
 };
