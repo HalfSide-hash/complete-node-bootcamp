@@ -29,6 +29,8 @@ const sendErrorDev = (err, req, res) => {
       stack: err.stack,
     });
   } else {
+    console.error('ERROR ', err);
+
     res.status(err.statusCode).render('error', {
       title: 'Something went wrong!',
       msg: err.message,
@@ -81,6 +83,7 @@ module.exports = (err, req, res, next) => {
     sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
+    error.message = err.message;
     //err.name got deprecated! so we took matters into our own hand by using the stack
     if (err.stack.indexOf('CastError', 0) === 0)
       error = handleCastErrorDB(error);
