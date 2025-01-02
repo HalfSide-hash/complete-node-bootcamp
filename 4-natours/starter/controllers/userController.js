@@ -2,6 +2,7 @@ const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const multer = require('multer');
+const sharp = require('sharp');
 const factory = require('./handlerFactory');
 
 const filterObj = (obj, ...allowedFields) => {
@@ -37,14 +38,18 @@ const upload = multer({
 
 exports.uploadUserPhoto = upload.single('photo');
 
+exports.resizeUserPhoto = (req, res, next) => {
+  if (!req.file) return next();
+
+  sharp(req.file);
+};
+
 exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
 };
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  console.log(req.file);
-  console.log(req.body);
   //Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(
@@ -56,6 +61,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   }
   //Update user document
   const filteredBody = filterObj(req.body, 'name', 'email');
+  if (req.file) filteredBody.photo = req.file.filename;
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true,
